@@ -35,3 +35,24 @@ from glob import glob
 """adds operating system dependant functionality"""
 import os
 
+
+##matplotlib and seaborn modules with descriptions
+"""2-D plotting library that make matplotlib work like MATLAB"""
+import matplotlib.pyplot as plt
+
+"""A patch is a 2D artist with a face color and an edge color."""
+from matplotlib import patches as mpatches
+
+"""imports color map used for plotting"""
+from matplotlib.colors import ListedColormap
+
+"""imports color options in plotting"""
+from matplotlib import colors
+
+"""renames matplotlib to mpl to make shorthand easier"""
+import matplotlib as mpl
+
+"""this is a data visualization library that
+works in tandem with matplotlib"""
+import seaborn as sns
+
