@@ -56,3 +56,31 @@ import matplotlib as mpl
 works in tandem with matplotlib"""
 import seaborn as sns
 
+
+
+##rasterio module and descriptions
+"""rasterio stores grid info of tiff files"""
+import rasterio as rio
+
+"""plotting_extent sets the extent of the image"""
+from rasterio.plot import plotting_extent
+
+"""mask makes filled array based on shapefile boundaries"""
+from rasterio.mask import mask
+
+
+
+
+##geopandas and earthpy modules with descriptions
+"""geopandas is used for reading geospatial data"""
+import geopandas as gpd
+
+"""shapely works specifically with spatial files like shape, point, lines ect..
+this specific tool allows for mapping and bounding boxes i think"""
+from shapely.geometry import mapping, box
+
+"""earthpy is a module that uses geopandas and rasterios and matplotlib
+to better work with geospatial data and vector data
+specifically for scientific purposes"""
+import earthpy as et
+import earthpy.spatial as es
