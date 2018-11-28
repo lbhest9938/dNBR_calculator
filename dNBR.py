@@ -21,3 +21,17 @@
 ##6. generates color map of dNBR
 
 ##7. plots these classes in a graph
+
+## first we have to install python libraries
+
+
+##numpy and glob modules with descriptions
+"""numpy is for scientific computing"""
+import numpy as np
+
+"""reads filepaths using unix path extensions"""
+from glob import glob
+
+"""adds operating system dependant functionality"""
+import os
+
