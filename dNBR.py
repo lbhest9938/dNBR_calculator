@@ -84,3 +84,38 @@ to better work with geospatial data and vector data
 specifically for scientific purposes"""
 import earthpy as et
 import earthpy.spatial as es
+
+"""this sets the background to white for plots"""
+sns.set_style('white')
+
+"""filepath for project"""
+os.path.join("P:/python final project/data")
+
+#NBR post fire calculations
+
+"""this line pulls all of the landsat bands file for the postfire NBR"""
+all_landsat_bands = glob(
+    "data/cold-springs-fire/landsat_collect/LC080340322016072301T1-SC20180214145802/crop/*band*.tif")
+
+"this compiles and sorts the landsat bands" 
+all_landsat_bands.sort()
+
+
+"""setting our output file path"""
+landsat_post_fire_path = "data/cold-springs-fire/outputs/landsat_post_fire.tif"
+
+"""es.stack will stack all bands on top of one another.
+making raster values more easily comparable."""
+es.stack_raster_tifs(all_landsat_bands,
+                     landsat_post_fire_path)
+
+
+# we can clip the files but in this case we use .read()
+"""the next 5 lines will open the file, set up profile, set up bounding box,
+our plotting extent, and validates that our data has values assigned to array"""
+
+with rio.open(landsat_post_fire_path) as src:
+    landsat_post_fire = src.read(masked=True)
+    landsat_post_meta = src.profile
+    landsat_post_bounds = src.bounds
+    landsat_extent = plotting_extent(src)
