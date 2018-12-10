@@ -119,3 +119,39 @@ with rio.open(landsat_post_fire_path) as src:
     landsat_post_meta = src.profile
     landsat_post_bounds = src.bounds
     landsat_extent = plotting_extent(src)
+
+
+# Open fire boundary layer and reproject it to match the Landsat data
+fire_boundary_path = "data/cold-springs-fire/vector_layers/fire-boundary-geomac/co_cold_springs_20160711_2200_dd83.shp"
+fire_boundary = gpd.read_file(fire_boundary_path)
+
+
+# If the CRS' are not the same be sure to reproject
+"""this reprojects the coordinate reference system for the fire boundary"""
+fire_bound_utmz13 = fire_boundary.to_crs(landsat_post_meta['crs'])
+
+
+#calculating NBR postfire and plotting results
+"""this calculates postfire NBR"""
+landsat_postfire_nbr = (
+    landsat_post_fire[4]-landsat_post_fire[6]) / (landsat_post_fire[4]+landsat_post_fire[6])
+
+"""sets plot parameters"""
+fig, ax = plt.subplots(figsize=(12, 6))
+"""sets a divergent colormap, legend, and value extents"""
+nbr_post = ax.imshow(landsat_postfire_nbr,
+                 cmap='PiYG',
+                 vmin=-1,
+                 vmax=1,
+                 extent=landsat_extent)
+
+"""this projects fire boundary on map.
+also sets no color fill but a 2pt width black border"""
+fire_bound_utmz13.plot(ax=ax, color='None',
+                       edgecolor='black', linewidth=2)
+"""makes colorbar in the plot so we have a legend with our colormap"""
+fig.colorbar(nbr_post)
+ax.set(title="Landsat derived Normalized Burn Ratio\n 23 July 2016 \n Post Cold Springs Fire")
+ax.set_axis_off()
+plt.show()
+
