@@ -1,0 +1,3 @@
+i was never able to install the environment i needed so i am not sure what versions of the third party libraries that i need. 
+here is the tutorial to install the python environment.
+https://www.earthdatascience.org/workshops/setup-earth-analytics-python/
