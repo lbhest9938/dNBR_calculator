@@ -155,3 +155,54 @@ ax.set(title="Landsat derived Normalized Burn Ratio\n 23 July 2016 \n Post Cold 
 ax.set_axis_off()
 plt.show()
 
+# stack bands NBR prefire.
+"""loads all landsat bands from file"""
+all_landsat_bands_pre = glob(
+    "data/cold-springs-fire/landsat_collect/LC080340322016070701T1-SC20180214145604/crop/*band*.tif")
+"""sorts bands from 1-7"""
+all_landsat_bands_pre.sort()
+"""this sets output location for our prefire NBR tif"""
+landsat_pre_fire_path = "data/cold-springs-fire/outputs/landsat_pre_fire.tif"
+
+es.stack_raster_tifs(all_landsat_bands_pre,
+                     landsat_pre_fire_path)
+
+# again we not cropping the data in this lesson so you can just use .read()
+with rio.open(landsat_pre_fire_path) as src2:
+    landsat_pre_fire = src2.read(masked=True)
+    landsat_pre_meta = src2.profile
+    landsat_pre_bounds = src2.bounds
+    landsat_extent = plotting_extent(src2)
+
+# Open fire boundary layer and reproject it to match the Landsat data
+fire_boundary_path_pre = "data/cold-springs-fire/vector_layers/fire-boundary-geomac/co_cold_springs_20160711_2200_dd83.shp"
+fire_boundary_pre = gpd.read_file(fire_boundary_path)
+
+# setting the CRS to utm13 again
+"""this reprojects the coordinate reference system for the fire boundary"""
+fire_bound_utmz13_pre = fire_boundary_pre.to_crs(landsat_pre_meta['crs'])
+
+
+#calculating NBR prefire and plotting results
+"""this calculates prefire NBR"""
+landsat_prefire_nbr = (
+    landsat_pre_fire[4]-landsat_pre_fire[6]) / (landsat_pre_fire[4]+landsat_pre_fire[6])
+
+"""sets plot parameters"""
+fig, ax = plt.subplots(figsize=(12, 6))
+"""sets a divergent colormap, legend, and value extents"""
+nbr_pre = ax.imshow(landsat_prefire_nbr,
+                 cmap='PiYG',
+                 vmin=-1,
+                 vmax=1,
+                 extent=landsat_extent)
+
+"""this projects fire boundary on map.
+also sets no color fill but a 2pt width black border"""
+fire_bound_utmz13_pre.plot(ax=ax, color='None',
+                       edgecolor='black', linewidth=2)
+"""makes colorbar in the plot so we have a legend with our colormap"""
+fig.colorbar(nbr_pre)
+ax.set(title="Landsat derived Normalized Burn Ratio\n 7 July 2016 \n Pre Cold Springs Fire")
+ax.set_axis_off()
+plt.show()
