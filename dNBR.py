@@ -235,3 +235,29 @@ with rio.open(data/cold-springs-fire/outputs/landsat_pre_fire.tif) as nbr_pre_ch
                                                  [extent_geojson],
                                                  crop=True)
 
+#cropping and plotting NBR postfire
+fig, ax = plt.subplots(figsize=(12, 6))
+ax.imshow(landsat_prefire_nbr, cmap='PiYG',
+          extent=plotting_extent(nbr_post_chm))
+crop_extent.plot(ax=ax, alpha=.8)
+ax.set_title("NBR postfire")
+ax.set_axis_off()
+
+# create geojson object from the shapefile imported above
+"""geojson is a text structured format that allows us to set vertex extents of
+our clipping extent. this is like when you use clip tool in
+arcpro and it has the vertices listed."""
+extent_geojson = mapping(crop_extent_nbr['geometry'][0])
+extent_geojson
+{'type': 'Polygon',
+ 'coordinates': (((472510.46511627914, 4436000.0),
+   (476009.76417479065, 4436000.0),
+   (476010.46511627914, 4434000.0),
+   (472510.46511627914, 4434000.0),
+   (472510.46511627914, 4436000.0)),)}
+
+"""with the vertexes set we can now clip image"""
+with rio.open(data/cold-springs-fire/outputs/landsat_post_fire.tif) as nbr_post_chm:
+    nbr_post_chm_crop, nbr_post_chm_crop_affine = mask(nbr_post_chm,
+                                                 [extent_geojson],
+                                                 crop=True)
