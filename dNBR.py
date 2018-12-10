@@ -234,7 +234,11 @@ with rio.open(data/cold-springs-fire/outputs/landsat_pre_fire.tif) as nbr_pre_ch
     nbr_pre_chm_crop, nbr_pre_chm_crop_affine = mask(nbr_pre_chm,
                                                  [extent_geojson],
                                                  crop=True)
-
+# export NBR prefire
+path_out = "data/colorado-flood/spatial/outputs/nbr_pre_chm_cropped.tif"
+with rio.open(path_out, 'w', **nbr_pre_chm_meta) as ff_pre:
+    ff_pre.write(nbr_pre_chm_crop[0], 1)
+    
 #cropping and plotting NBR postfire
 fig, ax = plt.subplots(figsize=(12, 6))
 ax.imshow(landsat_prefire_nbr, cmap='PiYG',
@@ -261,3 +265,16 @@ with rio.open(data/cold-springs-fire/outputs/landsat_post_fire.tif) as nbr_post_
     nbr_post_chm_crop, nbr_post_chm_crop_affine = mask(nbr_post_chm,
                                                  [extent_geojson],
                                                  crop=True)
+# export NBR prefire
+path_out = "data/colorado-flood/spatial/outputs/nbr_post_chm_cropped.tif"
+with rio.open(path_out, 'w', **nbr_post_chm_meta) as ff_post:
+    ff_post.write(nbr_post_chm_crop[0], 1)
+
+dnbr_landsat = nbr_pre_chm_cropped - nbr_post_chm_cropped
+
+####this is where the lesson leaves me behind. 
+##to do rest of project i need to research how to set an array 
+##reclass the array into low, moderate, and high intensity burns
+##once that is taken care of i can do the statistics and histogram
+##part of this project. overall just a little bit above my head.
+
